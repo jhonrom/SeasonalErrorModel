@@ -3,28 +3,38 @@
 # University of Waterloo
 # 25/06/2024
 
+
+setwd("C://Users//jromeroc//Documents//UWaterloo//PostProcessorErrorModel//SeasonalModelError//Code")
+
+
 # 0. Install and load libraries
 if(!require(zoo)){install.packages('zoo'); library(zoo)} else {library(zoo)}
 
 
 ## Calibration -----
 
-### Daily Raw residual -----
-cal.date <- as.Date(calData$'02HD012'$date, format = "%Y-%m-%d")
+# load calibration data, hydromodel outputs
+load("CalibrationHydroModels_02HD012.RDa")
 
-Raw_RES_02HD012_LSTM.lumped        <- calData$'02HD012'$observed..valid. - calData$'02HD012'$LSTM.lumped
-Raw_RES_02HD012_LBRM.CC.lumped     <- calData$'02HD012'$observed..valid. - calData$'02HD012'$LBRM.CC.lumped
-Raw_RES_02HD012_HYMOD2.lumped      <- calData$'02HD012'$observed..valid. - calData$'02HD012'$HYMOD2.lumped
-Raw_RES_02HD012_GR4J.lumped        <- calData$'02HD012'$observed..valid. - calData$'02HD012'$GR4J.lumped
-Raw_RES_02HD012_HMETS.lumped       <- calData$'02HD012'$observed..valid. - calData$'02HD012'$HMETS.lumped
-Raw_RES_02HD012_Blended.lumped     <- calData$'02HD012'$observed..valid. - calData$'02HD012'$Blended.lumped
-Raw_RES_02HD012_Blended.Raven      <- calData$'02HD012'$observed..valid. - calData$'02HD012'$Blended.Raven
-Raw_RES_02HD012_VIC.Raven          <- calData$'02HD012'$observed..valid. - calData$'02HD012'$VIC.Raven
-Raw_RES_02HD012_SWAT.Raven         <- calData$'02HD012'$observed..valid. - calData$'02HD012'$SWAT.Raven
-Raw_RES_02HD012_WATFLOOD.Raven     <- calData$'02HD012'$observed..valid. - calData$'02HD012'$WATFLOOD.Raven
-Raw_RES_02HD012_MESH.CLASS.Raven   <- calData$'02HD012'$observed..valid. - calData$'02HD012'$MESH.CLASS.Raven
-Raw_RES_02HD012_MESH.SVS.Raven     <- calData$'02HD012'$observed..valid. - calData$'02HD012'$MESH.SVS.Raven
-Raw_RES_02HD012_GEM.Hydro.Watroute <- calData$'02HD012'$observed..valid. - calData$'02HD012'$GEM.Hydro.Watroute
+# load calibration data, REM post-processor outputs
+load("CalibrationREMPP_02HD012.RDa")
+
+### Daily Raw residual -----
+cal.date <- as.Date(Cal_Gana$date, format = "%Y-%m-%d")
+
+Raw_RES_02HD012_LSTM.lumped        <- Cal_Gana$observed..valid. - Cal_Gana$LSTM.lumped
+Raw_RES_02HD012_LBRM.CC.lumped     <- Cal_Gana$observed..valid. - Cal_Gana$LBRM.CC.lumped
+Raw_RES_02HD012_HYMOD2.lumped      <- Cal_Gana$observed..valid. - Cal_Gana$HYMOD2.lumped
+Raw_RES_02HD012_GR4J.lumped        <- Cal_Gana$observed..valid. - Cal_Gana$GR4J.lumped
+Raw_RES_02HD012_HMETS.lumped       <- Cal_Gana$observed..valid. - Cal_Gana$HMETS.lumped
+Raw_RES_02HD012_Blended.lumped     <- Cal_Gana$observed..valid. - Cal_Gana$Blended.lumped
+Raw_RES_02HD012_Blended.Raven      <- Cal_Gana$observed..valid. - Cal_Gana$Blended.Raven
+Raw_RES_02HD012_VIC.Raven          <- Cal_Gana$observed..valid. - Cal_Gana$VIC.Raven
+Raw_RES_02HD012_SWAT.Raven         <- Cal_Gana$observed..valid. - Cal_Gana$SWAT.Raven
+Raw_RES_02HD012_WATFLOOD.Raven     <- Cal_Gana$observed..valid. - Cal_Gana$WATFLOOD.Raven
+Raw_RES_02HD012_MESH.CLASS.Raven   <- Cal_Gana$observed..valid. - Cal_Gana$MESH.CLASS.Raven
+Raw_RES_02HD012_MESH.SVS.Raven     <- Cal_Gana$observed..valid. - Cal_Gana$MESH.SVS.Raven
+Raw_RES_02HD012_GEM.Hydro.Watroute <- Cal_Gana$observed..valid. - Cal_Gana$GEM.Hydro.Watroute
 
 
 
@@ -207,67 +217,67 @@ dev.off()
 jpeg("./Fig_CAl_Std_residuals02HD012_v2.jpg", res = 600, width = 20, height = 12, units = "in")
 layout(matrix(c(1,1,2,2,3,4,5,6,7,8,9,10,11,12,13,13), 4, 4, byrow = TRUE))
 par(mar = c(1.7,2.3,0.5,0.8))
-plot(cal.date, allStationResaultsCal$'02HD012'$LSTM.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$LSTM.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "LSTM.lumped", cex = 2)
 #locator()
-plot(cal.date, allStationResaultsCal$'02HD012'$GR4J.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$GR4J.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "GR4J.lumped", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$Blended.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$Blended.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "Blended.lumped", cex = 2)
 
-plot(cal.date[-1], allStationResaultsCal$'02HD012'$VIC.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date[-1], Cal_Gana_RESPP$VIC.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "VIC.Raven", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$HMETS.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$HMETS.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "HMETS.lumped", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$LBRM.CC.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$LBRM.CC.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "LBRM.CC.lumped", cex = 2)
 
-plot(cal.date[-1], allStationResaultsCal$'02HD012'$MESH.SVS.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date[-1], Cal_Gana_RESPP$MESH.SVS.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "MESH.SVS.Raven", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$HYMOD2.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$HYMOD2.lumped$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "HYMOD2.lumped", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$Blended.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$Blended.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "Blended.Raven", cex = 2)
 
-plot(cal.date[-1], allStationResaultsCal$'02HD012'$SWAT.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date[-1], Cal_Gana_RESPP$SWAT.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "SWAT.Raven", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$WATFLOOD.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$WATFLOOD.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "WATFLOOD.Raven", cex = 2)
 
-plot(cal.date[-1], allStationResaultsCal$'02HD012'$GEM.Hydro.Watroute$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date[-1], Cal_Gana_RESPP$GEM.Hydro.Watroute$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "GEM.Hydro.Watroute", cex = 2)
 
-plot(cal.date, allStationResaultsCal$'02HD012'$MESH.CLASS.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(cal.date, Cal_Gana_RESPP$MESH.CLASS.Raven$nu, ylim = c(-5,7), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "") #Daily timestep, Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(13022.8,5, labels = "MESH.CLASS.Raven", cex = 2)
@@ -277,19 +287,19 @@ dev.off()
 ### Monthly Standardized residual -----
 # compute standardized residual for station 02HD012
 # create zoo object
-GanaValStdRes_LSTM.lumped        <- zoo( allStationResaultsCal$'02HD012'$LSTM.lumped$nu, order.by = cal.date)
-GanaValStdRes_LBRM.CC.lumped     <- zoo( allStationResaultsCal$'02HD012'$LBRM.CC.lumped$nu, order.by = cal.date)
-GanaValStdRes_HYMOD2.lumped      <- zoo( allStationResaultsCal$'02HD012'$HYMOD2.lumped$nu, order.by = cal.date)
-GanaValStdRes_GR4J.lumped        <- zoo( allStationResaultsCal$'02HD012'$GR4J.lumped$nu, order.by = cal.date)
-GanaValStdRes_HMETS.lumped       <- zoo( allStationResaultsCal$'02HD012'$HMETS.lumped$nu, order.by = cal.date)
-GanaValStdRes_Blended.lumped     <- zoo( allStationResaultsCal$'02HD012'$Blended.lumped$nu, order.by = cal.date)
-GanaValStdRes_Blended.Raven      <- zoo( allStationResaultsCal$'02HD012'$Blended.Raven$nu, order.by = cal.date)
-GanaValStdRes_VIC.Raven          <- zoo( allStationResaultsCal$'02HD012'$VIC.Raven$nu, order.by = cal.date)
-GanaValStdRes_SWAT.Raven         <- zoo( allStationResaultsCal$'02HD012'$SWAT.Raven$nu, order.by = cal.date)
-GanaValStdRes_WATFLOOD.Raven     <- zoo( allStationResaultsCal$'02HD012'$WATFLOOD.Raven$nu, order.by = cal.date)
-GanaValStdRes_MESH.CLASS.Raven   <- zoo( allStationResaultsCal$'02HD012'$MESH.CLASS.Raven$nu, order.by = cal.date)
-GanaValStdRes_MESH.SVS.Raven     <- zoo( allStationResaultsCal$'02HD012'$MESH.SVS.Raven$nu, order.by = cal.date)
-GanaValStdRes_GEM.Hydro.Watroute <- zoo( allStationResaultsCal$'02HD012'$GEM.Hydro.Watroute$nu, order.by = cal.date)
+GanaValStdRes_LSTM.lumped        <- zoo( Cal_Gana_RESPP$LSTM.lumped$nu, order.by = cal.date)
+GanaValStdRes_LBRM.CC.lumped     <- zoo( Cal_Gana_RESPP$LBRM.CC.lumped$nu, order.by = cal.date)
+GanaValStdRes_HYMOD2.lumped      <- zoo( Cal_Gana_RESPP$HYMOD2.lumped$nu, order.by = cal.date)
+GanaValStdRes_GR4J.lumped        <- zoo( Cal_Gana_RESPP$GR4J.lumped$nu, order.by = cal.date)
+GanaValStdRes_HMETS.lumped       <- zoo( Cal_Gana_RESPP$HMETS.lumped$nu, order.by = cal.date)
+GanaValStdRes_Blended.lumped     <- zoo( Cal_Gana_RESPP$Blended.lumped$nu, order.by = cal.date)
+GanaValStdRes_Blended.Raven      <- zoo( Cal_Gana_RESPP$Blended.Raven$nu, order.by = cal.date)
+GanaValStdRes_VIC.Raven          <- zoo( Cal_Gana_RESPP$VIC.Raven$nu, order.by = cal.date)
+GanaValStdRes_SWAT.Raven         <- zoo( Cal_Gana_RESPP$SWAT.Raven$nu, order.by = cal.date)
+GanaValStdRes_WATFLOOD.Raven     <- zoo( Cal_Gana_RESPP$WATFLOOD.Raven$nu, order.by = cal.date)
+GanaValStdRes_MESH.CLASS.Raven   <- zoo( Cal_Gana_RESPP$MESH.CLASS.Raven$nu, order.by = cal.date)
+GanaValStdRes_MESH.SVS.Raven     <- zoo( Cal_Gana_RESPP$MESH.SVS.Raven$nu, order.by = cal.date)
+GanaValStdRes_GEM.Hydro.Watroute <- zoo( Cal_Gana_RESPP$GEM.Hydro.Watroute$nu, order.by = cal.date)
 
 # create multi-monthly object
 GanaValStdRes_LSTM.lumpedm        <- aggregate(GanaValStdRes_LSTM.lumped, format(time(GanaValStdRes_LSTM.lumped), "%m"), mean)
@@ -420,8 +430,8 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 # define data frame
-df <- calData$'02HD012'
-df$date <- as.Date(calData$'02HD012'$date, format = "%Y-%m-%d")
+df <- Cal_Gana
+df$date <- as.Date(Cal_Gana$date, format = "%Y-%m-%d")
 head(df)
 str(df)
 # Add a month column
@@ -508,22 +518,28 @@ ggplot(kge_nse_monthly, aes(x = factor(Month), y = NSE, color = Model, shape = M
 
 ## Validation -----
 
-### Daily Raw residual -----
-val.date <- as.Date(valData$'02HD012'$date, format = "%Y-%m-%d")
+# load validation data, hydromodel outputs
+load("ValidationHydroModels_02HD012.RDa")
 
-Raw_RES_02HD012_LSTM.lumped        <- valData$'02HD012'$observed..valid. - valData$'02HD012'$LSTM.lumped
-Raw_RES_02HD012_LBRM.CC.lumped     <- valData$'02HD012'$observed..valid. - valData$'02HD012'$LBRM.CC.lumped
-Raw_RES_02HD012_HYMOD2.lumped      <- valData$'02HD012'$observed..valid. - valData$'02HD012'$HYMOD2.lumped
-Raw_RES_02HD012_GR4J.lumped        <- valData$'02HD012'$observed..valid. - valData$'02HD012'$GR4J.lumped
-Raw_RES_02HD012_HMETS.lumped       <- valData$'02HD012'$observed..valid. - valData$'02HD012'$HMETS.lumped
-Raw_RES_02HD012_Blended.lumped     <- valData$'02HD012'$observed..valid. - valData$'02HD012'$Blended.lumped
-Raw_RES_02HD012_Blended.Raven      <- valData$'02HD012'$observed..valid. - valData$'02HD012'$Blended.Raven
-Raw_RES_02HD012_VIC.Raven          <- valData$'02HD012'$observed..valid. - valData$'02HD012'$VIC.Raven
-Raw_RES_02HD012_SWAT.Raven         <- valData$'02HD012'$observed..valid. - valData$'02HD012'$SWAT.Raven
-Raw_RES_02HD012_WATFLOOD.Raven     <- valData$'02HD012'$observed..valid. - valData$'02HD012'$WATFLOOD.Raven
-Raw_RES_02HD012_MESH.CLASS.Raven   <- valData$'02HD012'$observed..valid. - valData$'02HD012'$MESH.CLASS.Raven
-Raw_RES_02HD012_MESH.SVS.Raven     <- valData$'02HD012'$observed..valid. - valData$'02HD012'$MESH.SVS.Raven
-Raw_RES_02HD012_GEM.Hydro.Watroute <- valData$'02HD012'$observed..valid. - valData$'02HD012'$GEM.Hydro.Watroute
+# load validation data, REM post-processor outputs
+load("ValidationREMPP_02HD012.RDa")
+
+### Daily Raw residual -----
+val.date <- as.Date(Val_Gana$date, format = "%Y-%m-%d")
+
+Raw_RES_02HD012_LSTM.lumped        <- Val_Gana$observed..valid. - Val_Gana$LSTM.lumped
+Raw_RES_02HD012_LBRM.CC.lumped     <- Val_Gana$observed..valid. - Val_Gana$LBRM.CC.lumped
+Raw_RES_02HD012_HYMOD2.lumped      <- Val_Gana$observed..valid. - Val_Gana$HYMOD2.lumped
+Raw_RES_02HD012_GR4J.lumped        <- Val_Gana$observed..valid. - Val_Gana$GR4J.lumped
+Raw_RES_02HD012_HMETS.lumped       <- Val_Gana$observed..valid. - Val_Gana$HMETS.lumped
+Raw_RES_02HD012_Blended.lumped     <- Val_Gana$observed..valid. - Val_Gana$Blended.lumped
+Raw_RES_02HD012_Blended.Raven      <- Val_Gana$observed..valid. - Val_Gana$Blended.Raven
+Raw_RES_02HD012_VIC.Raven          <- Val_Gana$observed..valid. - Val_Gana$VIC.Raven
+Raw_RES_02HD012_SWAT.Raven         <- Val_Gana$observed..valid. - Val_Gana$SWAT.Raven
+Raw_RES_02HD012_WATFLOOD.Raven     <- Val_Gana$observed..valid. - Val_Gana$WATFLOOD.Raven
+Raw_RES_02HD012_MESH.CLASS.Raven   <- Val_Gana$observed..valid. - Val_Gana$MESH.CLASS.Raven
+Raw_RES_02HD012_MESH.SVS.Raven     <- Val_Gana$observed..valid. - Val_Gana$MESH.SVS.Raven
+Raw_RES_02HD012_GEM.Hydro.Watroute <- Val_Gana$observed..valid. - Val_Gana$GEM.Hydro.Watroute
 
 
 
@@ -705,8 +721,8 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 # define data frame
-df <- valData$'02HD012'
-df$date <- as.Date(valData$'02HD012'$date, format = "%Y-%m-%d")
+df <- Val_Gana
+df$date <- as.Date(Val_Gana$date, format = "%Y-%m-%d")
 head(df)
 str(df)
 # Add a month column
@@ -793,72 +809,72 @@ ggplot(kge_nse_monthly, aes(x = factor(Month), y = NSE, color = Model, shape = M
 
 ### Daily Standardized residual -----
 
-val.date <- as.Date(valData$'02HD012'$date, format = "%Y-%m-%d")
+val.date <- as.Date(Val_Gana$date, format = "%Y-%m-%d")
 
 jpeg("./FigStd_residuals02HD012_v2.jpg", res = 600, width = 20, height = 12, units = "in")
 layout(matrix(c(1,1,2,2,3,4,5,6,7,8,9,10,11,12,13,13), 4, 4, byrow = TRUE))
 par(mar = c(1.7,2.3,0.5,0.8))
-plot(val.date, allStationResaultsVal$'02HD012'$LSTM.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$LSTM.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "LSTM.lumped", cex = 2)
 #locator()
-plot(val.date, allStationResaultsVal$'02HD012'$GR4J.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$GR4J.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "GR4J.lumped", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$Blended.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$Blended.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "Blended.lumped", cex = 2)
 
-plot(val.date[-1], allStationResaultsVal$'02HD012'$VIC.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date[-1], Val_Gana_RESPP$VIC.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "VIC.Raven", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$HMETS.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$HMETS.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "HMETS.lumped", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$LBRM.CC.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$LBRM.CC.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "LBRM.CC.lumped", cex = 2)
 
-plot(val.date[-1], allStationResaultsVal$'02HD012'$MESH.SVS.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date[-1], Val_Gana_RESPP$MESH.SVS.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "MESH.SVS.Raven", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$HYMOD2.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$HYMOD2.lumped$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "HYMOD2.lumped", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$Blended.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$Blended.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "Blended.Raven", cex = 2)
 
-plot(val.date[-1], allStationResaultsVal$'02HD012'$SWAT.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date[-1], Val_Gana_RESPP$SWAT.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "SWAT.Raven", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$WATFLOOD.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$WATFLOOD.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "WATFLOOD.Raven", cex = 2)
 
-plot(val.date, allStationResaultsVal$'02HD012'$GEM.Hydro.Watroute$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date, Val_Gana_RESPP$GEM.Hydro.Watroute$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "")#Daily timestep,Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "GEM.Hydro.Watroute", cex = 2)
 
-plot(val.date[-1], allStationResaultsVal$'02HD012'$MESH.CLASS.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
+plot(val.date[-1], Val_Gana_RESPP$MESH.CLASS.Raven$nu, ylim = c(-5,15), type = 'l', col='red', lwd=1, main = '', cex.axis = 2, cex.lab = 2,
      xlab ='', ylab = "") #Daily timestep, Standardized Residuals
 abline(h=0, col='black', lwd=2)
 text(15879.14,11, labels = "MESH.CLASS.Raven", cex = 2)
@@ -868,19 +884,19 @@ dev.off()
 ### Monthly Standardized residual -----
 # compute standardized residual for station 02HD012
 # create zoo object
-GanaValStdRes_LSTM.lumped        <- zoo( allStationResaultsVal$'02HD012'$LSTM.lumped$nu, order.by = val.date)
-GanaValStdRes_LBRM.CC.lumped     <- zoo( allStationResaultsVal$'02HD012'$LBRM.CC.lumped$nu, order.by = val.date)
-GanaValStdRes_HYMOD2.lumped      <- zoo( allStationResaultsVal$'02HD012'$HYMOD2.lumped$nu, order.by = val.date)
-GanaValStdRes_GR4J.lumped        <- zoo( allStationResaultsVal$'02HD012'$GR4J.lumped$nu, order.by = val.date)
-GanaValStdRes_HMETS.lumped       <- zoo( allStationResaultsVal$'02HD012'$HMETS.lumped$nu, order.by = val.date)
-GanaValStdRes_Blended.lumped     <- zoo( allStationResaultsVal$'02HD012'$Blended.lumped$nu, order.by = val.date)
-GanaValStdRes_Blended.Raven      <- zoo( allStationResaultsVal$'02HD012'$Blended.Raven$nu, order.by = val.date)
-GanaValStdRes_VIC.Raven          <- zoo( allStationResaultsVal$'02HD012'$VIC.Raven$nu, order.by = val.date)
-GanaValStdRes_SWAT.Raven         <- zoo( allStationResaultsVal$'02HD012'$SWAT.Raven$nu, order.by = val.date)
-GanaValStdRes_WATFLOOD.Raven     <- zoo( allStationResaultsVal$'02HD012'$WATFLOOD.Raven$nu, order.by = val.date)
-GanaValStdRes_MESH.CLASS.Raven   <- zoo( allStationResaultsVal$'02HD012'$MESH.CLASS.Raven$nu, order.by = val.date)
-GanaValStdRes_MESH.SVS.Raven     <- zoo( allStationResaultsVal$'02HD012'$MESH.SVS.Raven$nu, order.by = val.date)
-GanaValStdRes_GEM.Hydro.Watroute <- zoo( allStationResaultsVal$'02HD012'$GEM.Hydro.Watroute$nu, order.by = val.date)
+GanaValStdRes_LSTM.lumped        <- zoo( Val_Gana_RESPP$LSTM.lumped$nu, order.by = val.date)
+GanaValStdRes_LBRM.CC.lumped     <- zoo( Val_Gana_RESPP$LBRM.CC.lumped$nu, order.by = val.date)
+GanaValStdRes_HYMOD2.lumped      <- zoo( Val_Gana_RESPP$HYMOD2.lumped$nu, order.by = val.date)
+GanaValStdRes_GR4J.lumped        <- zoo( Val_Gana_RESPP$GR4J.lumped$nu, order.by = val.date)
+GanaValStdRes_HMETS.lumped       <- zoo( Val_Gana_RESPP$HMETS.lumped$nu, order.by = val.date)
+GanaValStdRes_Blended.lumped     <- zoo( Val_Gana_RESPP$Blended.lumped$nu, order.by = val.date)
+GanaValStdRes_Blended.Raven      <- zoo( Val_Gana_RESPP$Blended.Raven$nu, order.by = val.date)
+GanaValStdRes_VIC.Raven          <- zoo( Val_Gana_RESPP$VIC.Raven$nu, order.by = val.date)
+GanaValStdRes_SWAT.Raven         <- zoo( Val_Gana_RESPP$SWAT.Raven$nu, order.by = val.date)
+GanaValStdRes_WATFLOOD.Raven     <- zoo( Val_Gana_RESPP$WATFLOOD.Raven$nu, order.by = val.date)
+GanaValStdRes_MESH.CLASS.Raven   <- zoo( Val_Gana_RESPP$MESH.CLASS.Raven$nu, order.by = val.date)
+GanaValStdRes_MESH.SVS.Raven     <- zoo( Val_Gana_RESPP$MESH.SVS.Raven$nu, order.by = val.date)
+GanaValStdRes_GEM.Hydro.Watroute <- zoo( Val_Gana_RESPP$GEM.Hydro.Watroute$nu, order.by = val.date)
 
 # create multi-monthly object
 GanaValStdRes_LSTM.lumpedm        <- aggregate(GanaValStdRes_LSTM.lumped, format(time(GanaValStdRes_LSTM.lumped), "%m"), mean)
